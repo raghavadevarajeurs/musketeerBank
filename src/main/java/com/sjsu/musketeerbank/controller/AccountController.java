@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class AccountController {
 	@Autowired
 	private UserDAO userDao;
 	
-	
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@GetMapping("/getAccountDetails")
 	public ResponseEntity<List<User>> getAccountDetails(@RequestBody Account acctObj) {
 		try {
@@ -43,6 +44,7 @@ public class AccountController {
 		}
 	}
 	
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@PostMapping(
 			  value = "/createAccount", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> createAccount(@RequestBody User userObj) {

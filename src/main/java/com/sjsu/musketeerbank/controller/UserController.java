@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class UserController {
 	@Autowired
 	private UserDAO userDao;
 
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@GetMapping("/getUsers")
 	public ResponseEntity<List<User>> getAllUsers() {
 		try {
@@ -35,6 +37,7 @@ public class UserController {
 		}
 	}
 
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@PostMapping(
 			  value = "/createUser", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> createUser(@RequestBody User userObj) {
@@ -53,7 +56,7 @@ public class UserController {
 		}
 	}
 
-	
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@PostMapping(
 			  value = "/checkUserExists", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<User> checkUserExists(@RequestBody User userObj) {
@@ -73,6 +76,7 @@ public class UserController {
 		}
 	}
 	
+	@CrossOrigin(origins = {"http://localhost:4200"})
 	@PostMapping(
 			  value = "/login", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<User> loginUser(@RequestBody User userObj) {
