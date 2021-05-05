@@ -174,8 +174,6 @@ public class AccountDAO {
 	public int updateAccountNew(String accountid,int accountno) {
 		try {
 			String update_QUERY = "update Account set accountNumber=? where accountID=?";
-     
-             java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 			return jdbcTemplate.update(update_QUERY,accountno, accountid);
 		} catch (Exception e) {
 			System.out.println("Exception while update Account" + e);
@@ -183,6 +181,31 @@ public class AccountDAO {
 
 		}
 
+	}
+	
+	public int updateAccountBalance(double accountbalance,int accountNumber) {
+		try {
+			String update_QUERY = "update Account set balance=? where accountNumber=?";
+			return jdbcTemplate.update(update_QUERY,accountbalance, accountNumber);
+		} catch (Exception e) {
+			System.out.println("Exception while update Account Balance" + e);
+			return 0;
+
+		}
+
+	}
+	
+	
+	public double getUserAccountBalanceByAccno(String accountNumber) {
+		
+		try {
+			String Select_QUERY = "SELECT balance FROM Account where accountNumber=?";
+		   return (Double)jdbcTemplate.queryForObject(Select_QUERY,new Object[] {accountNumber},Double.class);
+		} catch (Exception e) {
+			System.out.println("Exception while Acc balance " + e);
+			return -9999;
+
+		}
 	}
 
 }

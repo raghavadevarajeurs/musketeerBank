@@ -86,8 +86,8 @@ public class AccountController {
 					
 					String accntid=acctDao.getaccountID(user.getUserId());
 					int accntnumber=61162545+Integer.parseInt(accntid);
-					int upfateacc=acctDao.updateAccountNew(accntid, accntnumber);
-					if(upfateacc==1)
+					int updateacc=acctDao.updateAccountNew(accntid, accntnumber);
+					if(updateacc==1)
 					{
 					String[] to = { userObj.getEmail() }; 
 					emailobj.sendFromGMail( to, "Welcome to TPM Bank", "Hello "+user.getFirstName()+" "+user.getLastName()+",/nYour account has been created in TPM Bank.\n Please find below account details\nAccount Number:"+accntnumber+"\nRegards,\n TPM Team");
@@ -111,7 +111,7 @@ public class AccountController {
 				}
 			}
 			
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Success",HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error", HttpStatus.OK);
 		}
