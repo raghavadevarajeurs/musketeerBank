@@ -7,11 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sjsu.musketeerbank.dao.RegistrationDAO;
 import com.sjsu.musketeerbank.dao.UserDAO;
+import com.sjsu.musketeerbank.model.Account;
 import com.sjsu.musketeerbank.model.Registration;
 import com.sjsu.musketeerbank.model.User;
 
@@ -26,7 +29,7 @@ public class RegistrationController {
 	@Autowired
 	private UserDAO userDao;
 
-	@CrossOrigin(origins = {"http://localhost:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@PostMapping(
 			  value = "/regitratonFormSubmissionUser", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> regitratonFormSubmissionUser(@RequestBody Registration regObj) {
@@ -79,5 +82,22 @@ public class RegistrationController {
 		}
 	}
 	
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
+	@GetMapping("/getAddAccountRequests")
+	public ResponseEntity<List<Registration>> getAddAccountRequests() {
+		try {
+
+			List<Registration> regDetails = regDao.getAddAccountRequests();
+
+			if (regDetails.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(regDetails, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	
 }

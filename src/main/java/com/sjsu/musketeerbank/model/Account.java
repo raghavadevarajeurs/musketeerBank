@@ -10,6 +10,10 @@ public abstract class Account
 	private String accountType;	
 	
 	
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
 	public String getAccountType() {
 		return accountType;
 	}
@@ -50,6 +54,16 @@ public abstract class Account
 	}
 	
 	public abstract int getAccountNumber();
+	
+	public Account(int accountNumber, double balance, double minBalance, String createdDate, String accountType) {
+		super();
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+		this.minBalance = minBalance;
+		this.createdDate = createdDate;
+		this.accountType = accountType;
+	}
+
 	public abstract double getBalance();
 	
 	// Added this because it makes sense with my current application design

@@ -20,7 +20,7 @@ public class UserController {
 	@Autowired
 	private UserDAO userDao;
 
-	@CrossOrigin(origins = {"http://localhost:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@GetMapping("/getUsers")
 	public ResponseEntity<List<User>> getAllUsers() {
 		try {
@@ -36,8 +36,25 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
+	@GetMapping("/getAllCustomerNames")
+	public ResponseEntity<List> getAllCustomerNames() {
+		try {
 
-	@CrossOrigin(origins = {"http://localhost:4200"})
+			List users = userDao.getAllCustomerNames();
+
+			if (users.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(users, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@PostMapping(
 			  value = "/createUser", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> createUser(@RequestBody User userObj) {
@@ -56,7 +73,7 @@ public class UserController {
 		}
 	}
 
-	@CrossOrigin(origins = {"http://localhost:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@PostMapping(
 			  value = "/checkUserExists", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<User> checkUserExists(@RequestBody User userObj) {
@@ -76,7 +93,7 @@ public class UserController {
 		}
 	}
 	
-	@CrossOrigin(origins = {"http://localhost:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@PostMapping(
 			  value = "/login", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<User> loginUser(@RequestBody User userObj) {

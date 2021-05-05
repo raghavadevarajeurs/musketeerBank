@@ -18,6 +18,7 @@ public class AccountRowMapper implements RowMapper<Account> {
     	if(rs.getString("accountType").equals("Savings")){
     		acct = new SavingsAccount();
     		
+    		acct.setAccountNumber(Integer.parseInt(rs.getString("accountNumber")));
     		acct.setBalance(rs.getDouble("balance"));
     		acct.setMinBalance(rs.getDouble("minBalance"));
     		acct.setCreatedDate(rs.getString("createdDate"));

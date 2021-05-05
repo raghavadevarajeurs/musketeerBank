@@ -16,7 +16,9 @@ import org.springframework.stereotype.Repository;
 
 import com.sjsu.musketeerbank.model.Account;
 import com.sjsu.musketeerbank.model.User;
+import com.sjsu.musketeerbank.model.UserAccount;
 import com.sjsu.musketeerbank.repository.AccountRowMapper;
+import com.sjsu.musketeerbank.repository.UserAccountRowMapper;
 
 @Repository
 public class AccountDAO {
@@ -26,14 +28,14 @@ public class AccountDAO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountDAO.class);
 	
-	public List<Account> getAccountDetails(String userName) {
+	public List<Account> getUserAccountDetails(String userName) {
 		DataSource dataSource;
 		Connection connection = null;
 		String selectquery="";
 		List<Account> accounts = new ArrayList<>();
 
 		if(userName !=null){
-			selectquery = "select * from Account where userId = (select userId from Users where userName= ?)";
+			selectquery = "select * from Account where userId = (select userId from Users where userName= '"+userName+"')";
 		}		
 
 		try {
@@ -49,8 +51,13 @@ public class AccountDAO {
 
 			}
 
-			accounts.add((Account)  jdbcTemplate.queryForObject(
-					  selectquery, new Object[] { userName }, new AccountRowMapper()));
+			/*Account acct = (Account)jdbcTemplate.queryForObject(
+					  selectquery, new Object[] { userName }, new AccountRowMapper());*/
+			
+			accounts = jdbcTemplate.query(selectquery, new AccountRowMapper());
+			
+			//public Account(Integer.parseInt(rs.getString("accountNumber")), rs.getDouble("balance"), rs.getDouble("minBalance"), rs.getString("createdDate"), rs.getString("accountType")) 
+			
 
 		} catch (EmptyResultDataAccessException e) {
 			LOGGER.error(e.getMessage());
@@ -68,6 +75,55 @@ public class AccountDAO {
 				LOGGER.error("An error occurred while closing connection.", e);
 
 				// e.printStackTrace();
+			}
+		}
+
+		//return user;
+		return accounts;
+	}
+	
+	public List<UserAccount> getAllAccountDetails() {
+		DataSource dataSource;
+		Connection connection = null;
+		String selectquery="";
+		List<UserAccount> accounts = new ArrayList<>();
+
+			selectquery = "SELECT user.userID, user.userName, acct.accountNumber, acct.accountType, acct.balance"
+					+ "  FROM bankdb.Account acct, bankdb.Users user"
+					+ " where acct.userID = user.userID";
+			
+
+		try {
+			dataSource = jdbcTemplate.getDataSource();
+			connection = null;
+			if (null == dataSource) {
+
+			}
+
+			connection = dataSource.getConnection();
+
+			if (null == connection) {
+
+			}
+
+			accounts = jdbcTemplate.query(selectquery, new UserAccountRowMapper());
+			
+
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.error("An error occurred while getting  employees info.", e);
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.error("An error occurred while getting employees info.", e);
+
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+
+				LOGGER.error(e.getMessage());
+				LOGGER.error("An error occurred while closing connection.", e);
+
 			}
 		}
 

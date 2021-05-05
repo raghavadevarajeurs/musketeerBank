@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sjsu.musketeerbank.dao.AccountDAO;
 import com.sjsu.musketeerbank.dao.UserDAO;
 import com.sjsu.musketeerbank.model.Account;
 import com.sjsu.musketeerbank.model.User;
+import com.sjsu.musketeerbank.model.UserAccount;
 
 @Controller
 public class AccountController {
@@ -26,25 +28,43 @@ public class AccountController {
 	@Autowired
 	private UserDAO userDao;
 	
-	@CrossOrigin(origins = {"http://localhost:4200"})
-	@GetMapping("/getAccountDetails")
-	public ResponseEntity<List<User>> getAccountDetails(@RequestBody Account acctObj) {
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
+	@GetMapping("/getUserAccountDetails")
+	public ResponseEntity<List<Account>> getUserAccountDetails(@RequestParam String userName) {
 		try {
 
-			//List<User> users = acctDao.getAccountDetails();
-			List<User> users=null;
+			List<Account> accounts = acctDao.getUserAccountDetails(userName);
 
-			if (users.isEmpty()) {
+			if (accounts.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			return new ResponseEntity<>(users, HttpStatus.OK);
+			return new ResponseEntity<>(accounts, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	
-	@CrossOrigin(origins = {"http://localhost:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
+	@GetMapping("/getAllAccountDetails")
+	public ResponseEntity<List<UserAccount>> getAllAccountDetails() {
+		try {
+
+			List<UserAccount> accounts = acctDao.getAllAccountDetails();
+
+			if (accounts.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(accounts, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	
+	@CrossOrigin(origins = {"http://localhost:4200","https://localhost:4200"})
 	@PostMapping(
 			  value = "/createAccount", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> createAccount(@RequestBody User userObj) {

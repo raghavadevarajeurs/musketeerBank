@@ -74,6 +74,53 @@ public class UserDAO {
 
 	}
 
+	public List getAllCustomerNames() {
+
+		DataSource dataSource;
+		Connection connection = null;
+		List userNames = new ArrayList<>();
+
+		String selectquery = "select userName, userType from Users where userType = 'User'";
+
+		try {
+			dataSource = jdbcTemplate.getDataSource();
+			connection = null;
+			if (null == dataSource) {
+
+			}
+
+			connection = dataSource.getConnection();
+
+			if (null == connection) {
+
+			}
+
+			userNames = jdbcTemplate.query(selectquery,
+					(rs, rowNum) -> new User(rs.getString("userName"), rs.getString("userType")));
+
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.error("An error occurred while getting  employees info.", e);
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.error("An error occurred while getting employees info.", e);
+
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+
+				LOGGER.error(e.getMessage());
+				LOGGER.error("An error occurred while closing connection.", e);
+
+				// e.printStackTrace();
+			}
+		}
+
+		return userNames;
+
+	}
+	
 	public int createUser(User userObj) {
 		try {
 			String INSERT_QUERY = "INSERT INTO Users (userName,userType,firstName,lastName,email,password,phone) VALUES (?,?,?,?,?,?,?)";

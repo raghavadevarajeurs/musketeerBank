@@ -12,6 +12,11 @@ public class User {
 	private String phone;
 	private String accountType;
 	private String balance;
+	public User(String userName, String userType) {
+		super();
+		this.userName = userName;
+		this.userType = userType;
+	}
 	private String minBalance;
 
 	public String getAccountType() {
